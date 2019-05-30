@@ -1,4 +1,4 @@
-# To install source this file from your .zshrc file
+#!/usr/bin/env zsh
 
 # see documentation at http://linux.die.net/man/1/zshexpn
 preexec_update_git_vars() {
@@ -50,62 +50,62 @@ git_super_status() {
     precmd_update_git_vars
 
     if [ -n "$__CURRENT_GIT_STATUS" ]; then
-        local STATUS="$ZSH_THEME_GIT_PROMPT_PREFIX$ZSH_THEME_GIT_PROMPT_BRANCH$GIT_BRANCH%{${reset_color}%}"
+        local STATUS="$ZSH_THEME_GIT_PROMPT_PREFIX$ZSH_THEME_GIT_PROMPT_BRANCH$GIT_BRANCH$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
         local clean=1
 
         if [ -n "$GIT_REBASE" ] && [ "$GIT_REBASE" != "0" ]; then
-            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_REBASE$GIT_REBASE%{${reset_color}%}"
+            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_REBASE$GIT_REBASE$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
         elif [ "$GIT_MERGING" -ne "0" ]; then
-            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_MERGING%{${reset_color}%}"
+            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_MERGING$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
         fi
 
         if [ "$GIT_LOCAL_ONLY" -ne "0" ]; then
-            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_LOCAL%{${reset_color}%}"
+            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_LOCAL$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
         elif [ "$ZSH_GIT_PROMPT_SHOW_UPSTREAM" -gt "0" ] && [ -n "$GIT_UPSTREAM" ] && [ "$GIT_UPSTREAM" != ".." ]; then
             local parts=( "${(s:/:)GIT_UPSTREAM}" )
             if [ "$ZSH_GIT_PROMPT_SHOW_UPSTREAM" -eq "2" ] && [ "$parts[2]" = "$GIT_BRANCH" ]; then
                 GIT_UPSTREAM="$parts[1]"
             fi
-            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_UPSTREAM_FRONT$GIT_UPSTREAM$ZSH_THEME_GIT_PROMPT_UPSTREAM_END%{${reset_color}%}"
+            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_UPSTREAM_FRONT$GIT_UPSTREAM$ZSH_THEME_GIT_PROMPT_UPSTREAM_END$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
         fi
 
         if [ "$GIT_BEHIND" -ne "0" ] || [ "$GIT_AHEAD" -ne "0" ]; then
             STATUS="$STATUS "
         fi
         if [ "$GIT_BEHIND" -ne "0" ]; then
-            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_BEHIND$GIT_BEHIND%{${reset_color}%}"
+            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_BEHIND$GIT_BEHIND$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
         fi
         if [ "$GIT_AHEAD" -ne "0" ]; then
-            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_AHEAD$GIT_AHEAD%{${reset_color}%}"
+            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_AHEAD$GIT_AHEAD$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
         fi
 
         STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_SEPARATOR"
 
         if [ "$GIT_STAGED" -ne "0" ]; then
-            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STAGED$GIT_STAGED%{${reset_color}%}"
+            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STAGED$GIT_STAGED$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
             clean=0
         fi
         if [ "$GIT_CONFLICTS" -ne "0" ]; then
-            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_CONFLICTS$GIT_CONFLICTS%{${reset_color}%}"
+            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_CONFLICTS$GIT_CONFLICTS$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
             clean=0
         fi
         if [ "$GIT_CHANGED" -ne "0" ]; then
-            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_CHANGED$GIT_CHANGED%{${reset_color}%}"
+            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_CHANGED$GIT_CHANGED$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
             clean=0
         fi
         if [ "$GIT_UNTRACKED" -ne "0" ]; then
-            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_UNTRACKED$GIT_UNTRACKED%{${reset_color}%}"
+            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_UNTRACKED$GIT_UNTRACKED$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
             clean=0
         fi
         if [ "$GIT_STASHED" -ne "0" ]; then
-            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STASHED$GIT_STASHED%{${reset_color}%}"
+            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STASHED$GIT_STASHED$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
             clean=0
         fi
         if [ "$clean" -eq "1" ]; then
-            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_CLEAN%{${reset_color}%}"
+            STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_CLEAN$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
         fi
 
-        echo "%{${reset_color}%}$STATUS$ZSH_THEME_GIT_PROMPT_SUFFIX%{${reset_color}%}"
+        echo "$ZSH_THEME_GIT_PROMPT_RESET_COLOR$STATUS$ZSH_THEME_GIT_PROMPT_SUFFIX$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
     fi
 }
 
@@ -128,6 +128,7 @@ add-zsh-hook chpwd chpwd_update_git_vars
 add-zsh-hook preexec preexec_update_git_vars
 add-zsh-hook precmd precmd_update_git_vars
 
+ZSH_THEME_GIT_PROMPT_RESET_COLOR="%{${reset_color}%}"
 # Default values for the appearance of the prompt.
 # The theme is identical to magicmonty/bash-git-prompt
 ZSH_THEME_GIT_PROMPT_PREFIX="["
@@ -146,8 +147,8 @@ ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg_bold[green]%}%{✔%G%}"
 ZSH_THEME_GIT_PROMPT_LOCAL=" L"
 # The remote branch will be shown between these two
 ZSH_THEME_GIT_PROMPT_UPSTREAM_FRONT=" {%{$fg[blue]%}"
-ZSH_THEME_GIT_PROMPT_UPSTREAM_END="%{${reset_color}%}}"
-ZSH_THEME_GIT_PROMPT_MERGING="%{$fg_bold[magenta]%}|MERGING%{${reset_color}%}"
-ZSH_THEME_GIT_PROMPT_REBASE="%{$fg_bold[magenta]%}|REBASE%{${reset_color}%} "
+ZSH_THEME_GIT_PROMPT_UPSTREAM_END="$ZSH_THEME_GIT_PROMPT_RESET_COLOR}"
+ZSH_THEME_GIT_PROMPT_MERGING="%{$fg_bold[magenta]%}|MERGING$ZSH_THEME_GIT_PROMPT_RESET_COLOR"
+ZSH_THEME_GIT_PROMPT_REBASE="%{$fg_bold[magenta]%}|REBASE$ZSH_THEME_GIT_PROMPT_RESET_COLOR "
 
 # vim: set filetype=zsh:
